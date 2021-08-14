@@ -190,7 +190,7 @@ if (fn!="") {
     repeat (buffer_read_u16(b)) {
         find=ds_map_find_value(bgmap,buffer_read_string(b))    
         repeat (buffer_read_u16(b)) {
-            i=tile_add(find,buffer_read_u32(b),buffer_read_u32(b),buffer_read_u32(b),buffer_read_u32(b),ox+buffer_read_u32(b)*scale,oy+buffer_read_u32(b)*scale,buffer_read_u32(b))
+            i=tile_add(find,buffer_read_u32(b),buffer_read_u32(b),buffer_read_u32(b),buffer_read_u32(b),ox+buffer_read_i32(b)*scale,oy+buffer_read_i32(b)*scale,buffer_read_i32(b))
             tile_set_scale(i,buffer_read_float(b)*scale,buffer_read_float(b)*scale)
             tile_set_alpha(i,buffer_read_u8(b)/$ff)
             tile_set_blend(i,$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b))
@@ -200,8 +200,8 @@ if (fn!="") {
         find=ds_map_find_value(objmap,buffer_read_string(b))    
         repeat (buffer_read_u16(b)) {
             i=instance_create(ox,oy,find)
-            i.x+=buffer_read_u32(b)*scale
-            i.y+=buffer_read_u32(b)*scale
+            i.x+=buffer_read_i32(b)*scale
+            i.y+=buffer_read_i32(b)*scale
             i.image_xscale=buffer_read_float(b)*scale
             i.image_yscale=buffer_read_float(b)*scale
             i.image_angle=buffer_read_float(b)
