@@ -1,4 +1,4 @@
-#define gm82chunk_init
+#define __gm82chunk_init
 /*        
     Game Maker 8.2 room chunk system
     renex, august 2021
@@ -31,8 +31,8 @@ ds_map_add(m,"",-1)
 global.__gm82chunk_objmap=m
 
 
-#define gm82chunk_load
-///gm82chunk_load_room(roomname):roomid
+#define chunk_load_room
+///chunk_load_room(directory):roomid
 //loads a room file into an unloaded room and returns it
 var rm,dir,bgmap,objmap,i,f,f2,str,roomcode;
 
