@@ -167,3 +167,49 @@ room_set_code(rm,roomcode+file_text_read_all(dir+"code.gml"))
 
 return rm
 
+
+#define chunk_load_chunk
+///(filename,x,y,scale)
+
+var l,b,count,find,fn,i,ox,oy,scale,bgmap,objmap;
+
+fn=argument0
+ox=argument1
+oy=argument2
+scale=argument3
+
+if (fn!="") {
+    bgmap=global.__gm82chunk_bgmap
+    objmap=global.__gm82chunk_objmap
+
+    b=buffer_create()
+    buffer_load(b,fn)
+    
+    buffer_inflate(b)
+    
+    repeat (buffer_read_u16(b)) {
+        find=ds_map_find_value(bgmap,buffer_read_string(b))    
+        repeat (buffer_read_u16(b)) {
+            i=tile_add(find,buffer_read_u32(b),buffer_read_u32(b),buffer_read_u32(b),buffer_read_u32(b),ox+buffer_read_u32(b)*scale,oy+buffer_read_u32(b)*scale,buffer_read_u32(b))
+            tile_set_scale(i,buffer_read_float(b)*scale,buffer_read_float(b)*scale)
+            tile_set_alpha(i,buffer_read_u8(b)/$ff)
+            tile_set_blend(i,$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b))
+        }
+    }    
+    repeat (buffer_read_u16(b)) {
+        find=ds_map_find_value(objmap,buffer_read_string(b))    
+        repeat (buffer_read_u16(b)) {
+            i=instance_create(ox,oy,find)
+            i.x+=buffer_read_u32(b)*scale
+            i.y+=buffer_read_u32(b)*scale
+            i.image_xscale=buffer_read_float(b)*scale
+            i.image_yscale=buffer_read_float(b)*scale
+            i.image_angle=buffer_read_float(b)
+            i.image_alpha=buffer_read_u8(b)/$ff
+            i.image_blend=$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b)
+        }
+    }
+    
+    buffer_destroy(b)
+}
+
