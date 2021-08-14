@@ -171,7 +171,7 @@ return rm
 #define chunk_load_chunk
 ///(filename,x,y,scale)
 
-var l,b,count,find,fn,i,ox,oy,scale,bgmap,objmap;
+var l,b,count,find,fn,i,ox,oy,scale,bgmap,objmap,code;
 
 fn=argument0
 ox=argument1
@@ -199,14 +199,22 @@ if (fn!="") {
     repeat (buffer_read_u16(b)) {
         find=ds_map_find_value(objmap,buffer_read_string(b))    
         repeat (buffer_read_u16(b)) {
-            i=instance_create(ox,oy,find)
-            i.x+=buffer_read_i32(b)*scale
-            i.y+=buffer_read_i32(b)*scale
-            i.image_xscale=buffer_read_float(b)*scale
-            i.image_yscale=buffer_read_float(b)*scale
-            i.image_angle=buffer_read_float(b)
-            i.image_alpha=buffer_read_u8(b)/$ff
-            i.image_blend=$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b)
+            with (instance_create(ox,oy,find)) {
+                x+=buffer_read_i32(b)*scale
+                y+=buffer_read_i32(b)*scale
+                image_xscale=buffer_read_float(b)*scale
+                image_yscale=buffer_read_float(b)*scale
+                image_angle=buffer_read_float(b)
+                image_alpha=buffer_read_u8(b)/$ff
+                image_blend=$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b)
+                code=buffer_read_string(b)
+                //note: store and execute later
+                if (code!="") {
+                    execute_string(code)
+                    speed*=scale
+                    path_speed*=scale
+                }
+            }
         }
     }
     
