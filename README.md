@@ -1,7 +1,6 @@
 # gm82chunk
 This is a dynamic room loading extension designed for the Game Maker 8.2 ecosystem.
 
-Currently it's intended to optimize games that have too many rooms by loading and executing rooms in gm82save format v2 in the same project they're from, but in the future we plan to allow loading parts of rooms into the current room - the actual chunk system.
+Designed to optimize games with functionality to dynamically load rooms in gm82save format v2/v3, and also contains functions to load and manipulate chunk files exported from gm82room.
 
-Thanks to BPzeBanshee for designing a working proof of concept.
- 
+Currently a work in progress. Thanks to BPzeBanshee for designing a working proof of concept.
