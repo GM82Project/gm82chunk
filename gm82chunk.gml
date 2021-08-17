@@ -171,7 +171,7 @@ return rm
 #define chunk_load_chunk
 ///(filename,x,y,scale)
 
-var l,b,count,find,fn,i,ox,oy,scale,bgmap,objmap,code;
+var l,b,count,find,fn,i,ox,oy,scale,bgmap,objmap,code,instq;
 
 fn=argument0
 ox=argument1
@@ -187,6 +187,13 @@ if (fn!="") {
     
     buffer_inflate(b)
     
+    if (buffer_read_u8(b)>1) {
+        show_error("Chunk file version is too new. Please download an updated version of gm82chunk to load this chunk file.",0)
+        exit
+    }
+    
+    buffer_read_string(b) //skip game name - i'll assume you know what you're doing!
+    
     repeat (buffer_read_u16(b)) {
         find=ds_map_find_value(bgmap,buffer_read_string(b))    
         repeat (buffer_read_u16(b)) {
@@ -195,7 +202,9 @@ if (fn!="") {
             tile_set_alpha(i,buffer_read_u8(b)/$ff)
             tile_set_blend(i,$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b))
         }
-    }    
+    }
+
+    instq=ds_queue_create()
     repeat (buffer_read_u16(b)) {
         find=ds_map_find_value(objmap,buffer_read_string(b))    
         repeat (buffer_read_u16(b)) {
@@ -208,15 +217,16 @@ if (fn!="") {
                 image_alpha=buffer_read_u8(b)/$ff
                 image_blend=$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b)
                 code=buffer_read_string(b)
-                //note: store and execute later
-                if (code!="") {
-                    execute_string(code)
-                    speed*=scale
-                    path_speed*=scale
-                }
+                if (code!="") ds_queue_enqueue(instq,id)
             }
         }
     }
+    repeat (ds_queue_size(instq)) with (ds_queue_dequeue(instq)) {
+        execute_string(code)
+        speed*=scale
+        path_speed*=scale
+    }
+    ds_queue_destroy(instq)
     
     buffer_destroy(b)
 }
