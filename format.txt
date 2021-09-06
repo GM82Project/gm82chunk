@@ -1,29 +1,41 @@
 chunk file format
 
+u8 version == 2
+str gamename
+u32 width
+u32 height
+
 u16 bgcount {
     str bgname
     u16 tilecount {
-        u32 x
-        u32 y
         u32 u
         u32 v
         u32 w
         u32 h
+        i32 x
+        i32 y
         i32 depth
         f32 xs
         f32 ys
-        u32 argb
+        u8 alpha
+        u8 blue
+        u8 green
+        u8 red
     }
 }
 
 u16 objcount {
     str objname
     u16 instancecount {
-        u32 x
-        u32 y
+        i32 x
+        i32 y
         f32 xs
         f32 ys
         f32 rot
-        u32 argb
+        u8 alpha
+        u8 blue
+        u8 green
+        u8 red
+        str code
     }
 }

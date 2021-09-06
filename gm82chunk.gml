@@ -171,7 +171,7 @@ return rm
 #define chunk_load_chunk
 ///(filename,x,y,scale)
 
-var l,b,count,find,fn,i,ox,oy,scale,bgmap,objmap,code,instq;
+var l,b,count,find,fn,i,ox,oy,scale,bgmap,objmap,code,instq,name,load;
 
 fn=argument0
 ox=argument1
@@ -187,13 +187,15 @@ if (fn!="") {
     
     buffer_inflate(b)
     
-    if (buffer_read_u8(b)>1) {
+    if (buffer_read_u8(b)>2) {
         show_error("Chunk file version is too new. Please download an updated version of gm82chunk to load this chunk file.",0)
         exit
     }
     
     buffer_read_string(b) //skip game name - i'll assume you know what you're doing!
-    
+    buffer_read_u32(b) //width
+    buffer_read_u32(b) //height
+                                                                 
     repeat (buffer_read_u16(b)) {
         find=ds_map_find_value(bgmap,buffer_read_string(b))    
         repeat (buffer_read_u16(b)) {
@@ -203,20 +205,26 @@ if (fn!="") {
             tile_set_blend(i,$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b))
         }
     }
-
+    
     instq=ds_queue_create()
     repeat (buffer_read_u16(b)) {
         find=ds_map_find_value(objmap,buffer_read_string(b))    
         repeat (buffer_read_u16(b)) {
-            with (instance_create(ox,oy,find)) {
-                x+=buffer_read_i32(b)*scale
-                y+=buffer_read_i32(b)*scale
-                image_xscale=buffer_read_float(b)*scale
-                image_yscale=buffer_read_float(b)*scale
-                image_angle=buffer_read_float(b)
-                image_alpha=buffer_read_u8(b)/$ff
-                image_blend=$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b)
-                code=buffer_read_string(b)
+            load[0]=ox+buffer_read_i32(b)*scale
+            load[1]=oy+buffer_read_i32(b)*scale
+            load[2]=buffer_read_float(b)*scale
+            load[3]=buffer_read_float(b)*scale
+            load[4]=buffer_read_float(b)
+            load[5]=buffer_read_u8(b)/$ff
+            load[6]=$10000*buffer_read_u8(b)+$100*buffer_read_u8(b)+buffer_read_u8(b)
+            load[7]=buffer_read_string(b)            
+            with (instance_create(load[0],load[1],find)) {
+                image_xscale=load[2]
+                image_yscale=load[3]
+                image_angle=load[4]
+                image_alpha=load[5]
+                image_blend=load[6]
+                code=load[7]
                 if (code!="") ds_queue_enqueue(instq,id)
             }
         }
@@ -225,6 +233,7 @@ if (fn!="") {
         execute_string(code)
         speed*=scale
         path_speed*=scale
+        path_scale*=scale
     }
     ds_queue_destroy(instq)
     
