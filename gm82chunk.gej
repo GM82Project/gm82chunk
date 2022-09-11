@@ -1,0 +1,61 @@
+{
+	"name": "Game Maker 8.2 Chunk",
+	"folder": "gm82",
+	"version": "1.0",
+	"author": "renex",
+	"date": "13/03/2022",
+	"license": "Free to use, also for commercial games.",
+	"description": "Part of the standard Game Maker 8.2 distribution. This extension package allows you to load and manage room chunks exported from the new 8.2 Room Editor.",
+	"helpfile": "",
+	"hidden": false,
+	"dependencies": [
+		"Game Maker 8.2 Core",
+		"Game Maker 8.2 Network"
+	],
+	"files": [
+		{
+			"filename": "gm82chunk.gml",
+			"origname": "gm82chunk.gml",
+			"kind": 2,
+			"init": "__gm82chunk_init",
+			"final": "",
+			"functions": [
+				{
+					"name": "__gm82chunk_init",
+					"extname": "",
+					"calltype": 2,
+					"helpline": "",
+					"hidden": true,
+					"argtypes": null,
+					"returntype": 2
+				},
+				{
+					"name": "chunk_load_room",
+					"extname": "",
+					"calltype": 2,
+					"helpline": "chunk_load_room(directory)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "chunk_load_chunk",
+					"extname": "",
+					"calltype": 2,
+					"helpline": "chunk_load_chunk(filename,x,y,scale)",
+					"hidden": false,
+					"argtypes": [
+						2,
+						2,
+						2,
+						2
+					],
+					"returntype": 2
+				}
+			],
+			"constants": []
+		}
+	]
+}
