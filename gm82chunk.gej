@@ -3,14 +3,14 @@
 	"folder": "gm82",
 	"version": "1.0",
 	"author": "renex",
-	"date": "13/03/2022",
+	"date": "03/08/2025",
 	"license": "Free to use, also for commercial games.",
 	"description": "Part of the standard Game Maker 8.2 distribution. This extension package allows you to load and manage room chunks exported from the new 8.2 Room Editor.",
 	"helpfile": "",
 	"hidden": false,
 	"dependencies": [
 		"Game Maker 8.2 Core",
-		"Game Maker 8.2 Network"
+		"Game Maker 8.2 Buffer"
 	],
 	"files": [
 		{

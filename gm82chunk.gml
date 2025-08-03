@@ -182,9 +182,7 @@ if (fn!="") {
     bgmap=global.__gm82chunk_bgmap
     objmap=global.__gm82chunk_objmap
 
-    b=buffer_create()
-    buffer_load(b,fn)
-    
+    b=buffer_create(fn)    
     buffer_inflate(b)
     
     if (buffer_read_u8(b)>2) {
