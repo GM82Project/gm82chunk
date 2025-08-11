@@ -9,6 +9,8 @@
 */
 var m,c,i;
 
+globalvar gm82chunk_version;gm82chunk_version=100
+
 global.__gm82chunk_id[0]=room_add()
 global.__gm82chunk_id[1]=room_add()
 global.__gm82chunk_curid=0
